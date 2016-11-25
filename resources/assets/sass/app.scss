@@ -1,0 +1,23 @@
+
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.table.table-bordered {
+  td, th  {
+    font-weight: bold;
+  }
+}
+.panel-heading {
+  font-weight: bold;
+}
+
+.thumbnail-size {
+  width: 40px;
+  height: 40px;
+}
