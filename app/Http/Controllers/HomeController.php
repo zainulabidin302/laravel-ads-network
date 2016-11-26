@@ -30,7 +30,7 @@ class HomeController extends Controller
           return view('home', ['user' => $request->user()]);
     }
     public function ads_list(Request $request) {
-
+      
       if (Auth::check() && $request->user()->getType() == 'Seller') {
         return redirect()->route('/seller/ad');
       }

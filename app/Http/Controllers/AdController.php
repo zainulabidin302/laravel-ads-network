@@ -28,14 +28,27 @@ class AdController extends Controller
           if (isset($request['range']) && $request['range'] == 1) {
             $list = Ad::
               where(DB::raw('date(created_at)'), '>=',$request['date'])
-              ->where(DB::raw('date(created_at)'), '<=', $request['to'])
-              ->paginate(10);
+              ->where(DB::raw('date(created_at)'), '<=', $request['to']);
           } else {
-            $list = Ad::where(DB::raw('date(created_at)'), '=', $request['date'])->paginate(10);
+            $list = Ad::where(DB::raw('date(created_at)'), '=', $request['date']);
           }
+
+          if($request->user()->getType() == 'Admin') {
+              $list = $list->paginate(10);
+          } else {
+            $list = $list->where('user_id', $request->user()->id)->paginate(10);
+          }
+
         } else {
-          $list = Ad::paginate(10);
+          if($request->user()->getType() == 'Admin') {
+              $list = Ad::paginate(10);
+          } else {
+            $list = Ad::where('user_id', $request->user()->id)->paginate(10);
+          }
+
         }
+
+
         return view('ad.list', ['items' => $list]);
     }
 
@@ -65,6 +78,7 @@ class AdController extends Controller
         $ad->description = $request['description'];
         $ad->price = $request['price'];
         $ad->category_id = $request['category'];
+        $ad->user_id = $request->user()->id;
         $ad->save();
         $files = $request->file('file');
         if ($files) {
@@ -122,6 +136,7 @@ class AdController extends Controller
         $ad->description = $request['description'];
         $ad->price = $request['price'];
         $ad->category_id = $request['category'];
+        $ad->user_id = $request->user()->id;
         $ad->is_sold = $request['is_sold'] ? true : false;
         $ad->update();
         $files = $request->file('file');
